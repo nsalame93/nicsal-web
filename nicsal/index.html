@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nicsal Investments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0D12;
+    --bg-neutral: #0C1016;
+    --bg-brass: #0E141C;
+    --bg-blue: #0B121C;
+    --bg-green: #0C1519;
+    --surface: #10141C;
+    --surface-2: #182029;
+    --border: #232B36;
+    --text: #E7E9EC;
+    --text-muted: #87909C;
+    --brass: #6FA8DC;
+    --brass-soft: rgba(111,168,220,0.14);
+    --blue: #4E8FD6;
+    --blue-soft: rgba(78,143,214,0.14);
+    --green: #4FAE8A;
+    --green-soft: rgba(79,174,138,0.14);
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Space Grotesk', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  ::selection{background:var(--brass-soft); color:var(--text);}
+  :focus-visible{outline:2px solid var(--brass); outline-offset:3px;}
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  /* ---------- NAV ---------- */
+  header.site-nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,15,20,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 0;
+  }
+  .brand{display:flex; align-items:baseline; gap:10px;}
+  .brand-mark{
+    font-family:var(--display); font-weight:700; font-size:20px;
+    letter-spacing:0.02em;
+  }
+  .brand-mark span{color:var(--brass);}
+  .brand-tag{
+    font-family:var(--mono); font-size:11px; color:var(--text-muted);
+    letter-spacing:0.08em; text-transform:uppercase;
+    display:none;
+  }
+  @media(min-width:640px){ .brand-tag{display:inline;} }
+
+  nav.nav-links{display:flex; gap:28px;}
+  nav.nav-links a{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.03em;
+    color:var(--text-muted); text-transform:uppercase;
+    transition:color .15s ease;
+    padding:6px 2px; position:relative;
+  }
+  nav.nav-links a:hover{color:var(--text);}
+  nav.nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:var(--brass); transition:width .2s ease;
+  }
+  nav.nav-links a:hover::after{width:100%;}
+  @media(max-width:760px){ nav.nav-links{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:150px 0 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';
+    position:absolute; top:-200px; right:-200px;
+    width:520px; height:520px; border-radius:50%;
+    background:radial-gradient(circle, var(--brass-soft), transparent 70%);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:12.5px; color:var(--brass);
+    letter-spacing:0.14em; text-transform:uppercase;
+    display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:''; width:7px; height:7px; border-radius:50%;
+    background:var(--brass); box-shadow:0 0 0 4px var(--brass-soft);
+  }
+  h1.hero-title{
+    font-family:var(--display); font-weight:600;
+    font-size:clamp(38px, 6vw, 68px);
+    line-height:1.04; letter-spacing:-0.02em;
+    max-width:780px;
+  }
+  h1.hero-title em{
+    font-style:normal; color:var(--brass);
+  }
+  .hero-sub{
+    margin-top:26px; max-width:560px;
+    font-size:17px; color:var(--text-muted); line-height:1.65;
+  }
+  .hero-cta{
+    margin-top:36px; display:flex; gap:14px; flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.03em;
+    padding:13px 24px; border-radius:2px;
+    transition:all .18s ease; display:inline-flex; align-items:center; gap:8px;
+    border:1px solid transparent; cursor:pointer;
+  }
+  .btn-primary{
+    background:var(--brass); color:#081018; font-weight:600;
+  }
+  .btn-primary:hover{ background:#dcb32e; transform:translateY(-1px); }
+  .btn-ghost{
+    border-color:var(--border); color:var(--text);
+  }
+  .btn-ghost:hover{ border-color:var(--brass); color:var(--brass); }
+
+  .hero-bg{
+    position:absolute; inset:-30px;
+    background-size: 140%; background-position: -10% 35%;
+    filter:blur(0px) brightness(0.85) saturate(0.9);
+    z-index:0;
+  }
+  .hero-overlay{
+    position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg, rgba(10,13,18,0.55) 0%, rgba(10,13,18,0.88) 75%, var(--bg) 100%);
+  }
+  .hero .wrap{ position:relative; z-index:2; }
+
+  /* ---------- TICKER ---------- */
+  .ledger{
+    margin-top:76px; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  }
+  .ledger-row{
+    display:grid; grid-template-columns:repeat(4, 1fr);
+  }
+  .ledger-cell{
+    padding:26px 32px; border-left:1px solid var(--border);
+  }
+  .ledger-cell:first-child{border-left:none;}
+  .ledger-num{
+    font-family:var(--mono); font-size:clamp(22px,3vw,32px); font-weight:600;
+    color:var(--brass); letter-spacing:-0.01em;
+  }
+  .ledger-label{
+    font-family:var(--mono); font-size:11px; color:var(--text-muted);
+    text-transform:uppercase; letter-spacing:0.08em; margin-top:6px;
+  }
+  @media(max-width:760px){
+    .ledger-row{grid-template-columns:repeat(2,1fr);}
+    .ledger-cell:nth-child(3){border-left:none;}
+    .ledger-cell:nth-child(3), .ledger-cell:nth-child(4){border-top:1px solid var(--border);}
+  }
+
+  /* ---------- SECTION shared ---------- */
+  section{padding:104px 0; position:relative;}
+  section.tint-neutral{ background:var(--bg-neutral); }
+  section.tint-brass{ background:var(--bg-brass); }
+  section.tint-blue{ background:var(--bg-blue); }
+  section.tint-green{ background:var(--bg-green); }
+  .wrap{ position:relative; }
+  .section-watermark{
+    position:absolute; top:24px; right:32px;
+    font-family:var(--mono); font-weight:600; font-size:clamp(70px,9vw,150px);
+    line-height:1; letter-spacing:-0.04em; color:var(--brass); opacity:0.05;
+    pointer-events:none; user-select:none; z-index:0;
+  }
+  @media(max-width:820px){ .section-watermark{ display:none; } }
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:24px; margin-bottom:48px; flex-wrap:wrap;
+    position:relative; z-index:1;
+  }
+  .section-index{
+    font-family:var(--mono); font-size:11.5px; font-weight:600; color:var(--brass);
+    letter-spacing:0.1em; text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 16px; margin-bottom:22px;
+    background:var(--brass-soft); border:1px solid rgba(201,162,39,0.35);
+    border-radius:20px;
+  }
+  .section-index::before{
+    content:''; width:6px; height:6px; border-radius:50%; background:var(--brass);
+  }
+  h2.section-title{
+    font-family:var(--display); font-weight:600;
+    font-size:clamp(28px,3.6vw,40px); letter-spacing:-0.01em;
+    position:relative; z-index:1;
+  }
+  .section-note{
+    font-family:var(--body); color:var(--text-muted); font-size:14.5px;
+    max-width:420px; position:relative; z-index:1;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid; grid-template-columns:220px 1fr; gap:56px; align-items:start;
+  }
+  .about-photo{
+    width:220px; height:220px; border-radius:4px;
+    background:linear-gradient(155deg, var(--surface-2), var(--surface));
+    border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-size:56px; font-weight:600; color:var(--brass);
+  }
+  .about-text p{ color:var(--text-muted); font-size:16px; line-height:1.75; margin-bottom:18px; max-width:640px;}
+  .about-text strong{color:var(--text); font-weight:600;}
+  .about-facts{
+    margin-top:28px; display:grid; grid-template-columns:repeat(2,1fr); gap:16px; max-width:520px;
+  }
+  .fact{
+    font-family:var(--mono); font-size:12.5px; color:var(--text-muted);
+    border-left:2px solid var(--brass); padding-left:12px;
+  }
+  .fact b{display:block; color:var(--text); font-size:14px; margin-bottom:2px;}
+  @media(max-width:700px){ .about-grid{grid-template-columns:1fr;} .about-photo{width:120px; height:120px; font-size:36px;} }
+
+  /* ---------- PORTFOLIO ---------- */
+  .filters{ display:flex; gap:10px; margin-bottom:28px; flex-wrap:wrap; }
+  .filter-btn{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.04em;
+    padding:9px 16px; border:1px solid var(--border); border-radius:2px;
+    color:var(--text-muted); background:transparent; cursor:pointer;
+    transition:all .15s ease; text-transform:uppercase;
+  }
+  .filter-btn:hover{ color:var(--text); border-color:var(--text-muted); }
+  .filter-btn.active{ color:var(--brass); border-color:var(--brass); background:var(--brass-soft); }
+
+  .table-head, .co-row, .re-row{
+    display:grid; align-items:center;
+    grid-template-columns:44px 2fr 1.2fr 1fr 0.9fr 0.9fr 20px;
+    gap:16px; padding:16px 18px;
+  }
+  .table-head{
+    font-family:var(--mono); font-size:10.5px; color:var(--text-muted);
+    text-transform:uppercase; letter-spacing:0.08em;
+    border-bottom:1px solid var(--border);
+  }
+  .co-list{ border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--surface); }
+  .co-row{
+    border-bottom:1px solid var(--border);
+    transition:background .15s ease;
+  }
+  .co-row:last-child{ border-bottom:none; }
+  .co-row:hover{ background:var(--surface-2); }
+  .logo-badge{
+    width:36px; height:36px; border-radius:8px;
+    background:#FFFFFF; border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-weight:700; font-size:14px; color:var(--brass);
+    overflow:hidden;
+  }
+  .logo-badge img{
+    width:100%; height:100%; object-fit:contain; padding:5px;
+  }
+  .co-name{ font-family:var(--display); font-weight:600; font-size:15.5px; letter-spacing:-0.01em; }
+  .co-sector{ font-family:var(--mono); font-size:12px; color:var(--text-muted); }
+  .co-year{ font-family:var(--mono); font-size:13px; color:var(--text-muted); }
+  .co-round{ font-family:var(--mono); font-size:12px; color:var(--text-muted); }
+  .status-pill{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.04em;
+    padding:5px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:6px;
+    justify-self:start; text-transform:uppercase;
+  }
+  .status-pill::before{ content:''; width:6px; height:6px; border-radius:50%; }
+  .status-invested{ background:var(--blue-soft); color:var(--blue); }
+  .status-invested::before{ background:var(--blue); }
+  .status-exited{ background:var(--green-soft); color:var(--green); }
+  .status-exited::before{ background:var(--green); }
+
+  @media(max-width:820px){
+    .table-head{display:none;}
+    .co-row, .re-row{
+      grid-template-columns:44px 1fr; grid-template-areas:"logo name" "sector sector" "meta meta";
+      row-gap:6px; padding:18px;
+    }
+    .logo-badge{grid-area:logo;}
+    .co-name{grid-area:name;}
+    .co-sector{grid-area:sector;}
+    .co-year, .co-round, .status-pill{ grid-area:meta; display:inline-block; margin-right:14px; }
+    .row-arrow{ display:none; }
+  }
+
+  .demo-flag{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:11px; color:var(--text-muted);
+    border:1px dashed var(--border); padding:8px 12px; border-radius:2px;
+    margin-bottom:24px;
+  }
+  .demo-flag b{color:var(--brass);}
+
+  /* ---------- REAL ESTATE ---------- */
+  .re-list{ border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--surface); }
+  .re-row{ grid-template-columns:44px 1.8fr 1.2fr 1fr 0.9fr 20px; border-bottom:1px solid var(--border); }
+  .re-row:last-child{border-bottom:none;}
+  .re-row:hover{background:var(--surface-2);}
+  .re-icon{
+    width:36px; height:36px; border-radius:8px;
+    background:var(--surface-2); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; color:var(--brass); font-size:16px;
+  }
+  .re-name{ font-family:var(--display); font-weight:600; font-size:15.5px; letter-spacing:-0.01em; }
+  .re-loc{font-family:var(--mono); font-size:12px; color:var(--text-muted);}
+
+  /* ---------- OPPORTUNITIES ---------- */
+  .opp-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; }
+  .opp-criteria{ list-style:none; margin-top:24px; display:flex; flex-direction:column; gap:16px; }
+  .opp-criteria li{
+    display:flex; gap:14px; font-size:15px; color:var(--text-muted); line-height:1.5;
+  }
+  .opp-criteria b{ font-family:var(--mono); color:var(--brass); font-size:13px; flex-shrink:0; padding-top:2px;}
+  .opp-form{
+    background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:32px;
+  }
+  .opp-form label{
+    display:block; font-family:var(--mono); font-size:11px; color:var(--text-muted);
+    text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; margin-top:20px;
+  }
+  .opp-form label:first-child{margin-top:0;}
+  .opp-form input, .opp-form textarea, .opp-form select{
+    width:100%; background:var(--surface-2); border:1px solid var(--border); color:var(--text);
+    padding:12px 14px; border-radius:3px; font-family:var(--body); font-size:14px;
+  }
+  .opp-form textarea{resize:vertical; min-height:90px;}
+  .opp-form button{ margin-top:26px; width:100%; justify-content:center; }
+  @media(max-width:820px){ .opp-grid{grid-template-columns:1fr;} }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--border); padding:64px 0 0;
+    background:var(--bg-neutral);
+  }
+  .footer-grid{
+    display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px;
+    padding-bottom:48px;
+  }
+  .footer-brand .brand-mark{ font-size:19px; }
+  .footer-tagline{
+    margin-top:14px; color:var(--text-muted); font-size:14px; line-height:1.65; max-width:280px;
+  }
+  .footer-col{ display:flex; flex-direction:column; gap:12px; }
+  .footer-col-title{
+    font-family:var(--mono); font-size:11px; color:var(--brass);
+    text-transform:uppercase; letter-spacing:0.08em; margin-bottom:2px;
+  }
+  .footer-col a, .footer-location{
+    font-family:var(--body); font-size:14px; color:var(--text-muted);
+    transition:color .15s ease;
+  }
+  .footer-col a:hover{ color:var(--brass); }
+  .footer-bottom{
+    border-top:1px solid var(--border); padding:20px 0;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+  .footer-bottom p{ font-family:var(--mono); font-size:11.5px; color:var(--text-muted); }
+  @media(max-width:760px){
+    .footer-grid{ grid-template-columns:1fr; gap:32px; }
+    .footer-bottom{ flex-direction:column; }
+  }
+
+  /* ---------- CLICKABLE ROWS ---------- */
+  .co-row, .re-row{ cursor:pointer; }
+  .co-row:focus-visible, .re-row:focus-visible{ background:var(--surface-2); }
+  .row-arrow{
+    font-family:var(--mono); color:var(--text-muted); font-size:14px;
+    justify-self:end; transition:transform .15s ease, color .15s ease;
+  }
+  .co-row:hover .row-arrow, .re-row:hover .row-arrow{ color:var(--brass); transform:translateX(3px); }
+
+  /* ---------- DETAIL VIEW ---------- */
+  #detail-view .wrap{ padding-bottom:0; }
+  .back-link{
+    font-family:var(--mono); font-size:12.5px; color:var(--text-muted);
+    display:inline-flex; align-items:center; gap:8px; margin-bottom:32px;
+    transition:color .15s ease;
+  }
+  .back-link:hover{ color:var(--brass); }
+
+  .detail-header{
+    display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+    padding-bottom:32px; border-bottom:1px solid var(--border); margin-bottom:36px;
+  }
+  .detail-logo{
+    width:64px; height:64px; border-radius:12px;
+    background:#FFFFFF; border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-weight:700; font-size:22px; color:var(--brass);
+    flex-shrink:0; overflow:hidden;
+  }
+  .detail-logo img{
+    width:100%; height:100%; object-fit:contain; padding:9px;
+  }
+  .detail-titles{ flex:1; min-width:220px; }
+  .detail-eyebrow{
+    font-family:var(--mono); font-size:11.5px; color:var(--text-muted);
+    text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;
+  }
+  .detail-title{
+    font-family:var(--display); font-weight:600; font-size:clamp(24px,3.4vw,34px);
+    letter-spacing:-0.01em;
+  }
+
+  .detail-facts{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+    gap:20px; margin-bottom:40px;
+  }
+  .detail-fact{ border-left:2px solid var(--brass); padding-left:12px; }
+  .detail-fact b{
+    display:block; font-family:var(--mono); font-size:16px; color:var(--text); margin-bottom:2px;
+  }
+  .detail-fact span{
+    font-family:var(--mono); font-size:11px; color:var(--text-muted);
+    text-transform:uppercase; letter-spacing:0.06em;
+  }
+
+  .detail-body{ max-width:680px; margin-bottom:56px; }
+  .detail-body p{ color:var(--text-muted); font-size:16px; line-height:1.75; margin-bottom:16px; }
+
+  .gallery-block{ margin-bottom:56px; }
+  .gallery-label{
+    font-family:var(--mono); font-size:12px; color:var(--brass);
+    text-transform:uppercase; letter-spacing:0.08em; margin-bottom:16px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .gallery-label::after{ content:''; flex:1; height:1px; background:var(--border); }
+  .gallery-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:16px;
+  }
+  .gallery-tile{
+    aspect-ratio:4/3; border-radius:6px; border:1px solid var(--border);
+    background:
+      repeating-linear-gradient(135deg, var(--surface-2) 0 2px, var(--surface) 2px 14px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    color:var(--text-muted); font-family:var(--mono); font-size:11px;
+    text-transform:uppercase; letter-spacing:0.06em; text-align:center; padding:12px;
+  }
+  .gallery-tile .icon{ font-size:22px; color:var(--brass); opacity:0.8; }
+
+  .demo-flag.small{ margin-bottom:20px; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important; animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <div class="brand">
+      <span class="brand-mark">NIC<span>SAL</span></span>
+      <span class="brand-tag">Investments</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#about">Sobre mí</a>
+      <a href="#portfolio">Mis Inversiones</a>
+      <a href="#contact">Contáctame</a>
+    </nav>
+  </div>
+</header>
+
+<div id="main-view">
+<section class="hero">
+  <div class="hero-bg" style="background-image:url('hero.jpg');"></div>
+  <div class="hero-overlay"></div>
+  <div class="wrap">
+    <h1 class="hero-title">Quiero estar donde se <em>construye</em> el futuro.</h1>
+    <p class="hero-sub">Nicsal Investments es el vehículo a través del cual invierto mi propio capital en startups de todo tipo, empresas consolidadas y sector inmobiliario.
+      Ni comités de inversión ni plazos de inversión infinitos. Solo tesis en las que creo y personas en las que veo
+      la capacidad de construir a largo plazo.</p>
+    <div class="hero-cta">
+      <a href="#portfolio" class="btn btn-primary">Mis inversiones →</a>
+      <a href="#opportunities" class="btn btn-ghost">Envíame tu proyecto</a>
+    </div>
+  </div>
+
+  <div class="ledger">
+    <div class="wrap">
+      <div class="ledger-row">
+        <div class="ledger-cell">
+          <div class="ledger-num">132</div>
+          <div class="ledger-label">Inversiones</div>
+        </div>
+        <div class="ledger-cell">
+          <div class="ledger-num">0</div>
+          <div class="ledger-label">Comités de Inversión</div>
+        </div>
+        <div class="ledger-cell">
+          <div class="ledger-num">∞</div>
+          <div class="ledger-label">Convicción</div>
+        </div>
+        <div class="ledger-cell">
+          <div class="ledger-num">100%</div>
+          <div class="ledger-label">Capital propio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="tint-neutral">
+  <div class="wrap">
+    <span class="section-watermark">01</span>
+    <span class="section-index">01 — Sobre mí</span>
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Nicolás Salame</h2>
+      </div>
+      <p class="section-note">Trayectoria, criterio y forma de operar detrás de Nicsal Investments.</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-photo">NS</div>
+      <div class="about-text">
+        <p>Fundé Akiles en 2018. Desde entonces, la tecnología y los proyectos que cambian de verdad el día a día de las personas han sido mi obsesión.
+           Lo que me mueve es estar vivo y poder participar, con capital y con convicción, en proyectos con un impacto brutal. 
+           Cuando no estoy invirtiendo, estoy pensando en dónde invertir. Creo profundamente en ir a gas en la vida y busco esa misma ambición en la gente en la que invierto: personas que le piden más a la vida y que quieren petarlo, no conformarse.</p>
+        <p>Su tesis de inversión prioriza equipos fundadores sólidos, modelos de negocio con caja predecible y
+          ubicaciones inmobiliarias con revalorización estructural. [Placeholder — describe tu filosofía de
+          inversión con más detalle.]</p>
+        <div class="about-facts">
+          <div class="fact"><b>Sede</b>Barcelona, España</div>
+          <div class="fact"><b>Sectores foco</b>Tech, Real Estate, Consumo</div>
+          <div class="fact"><b>Ticket habitual</b>50K–500K €</div>
+          <div class="fact"><b>Horizonte</b>5–10 años</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="portfolio" class="tint-brass">
+  <div class="wrap">
+    <span class="section-watermark">02</span>
+    <span class="section-index">02 — Portfolio</span>
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Empresas y startups</h2>
+      </div>
+      <p class="section-note">Participaciones directas en compañías, desde etapa semilla hasta empresas consolidadas.</p>
+    </div>
+
+    <div class="demo-flag"><b>Datos de ejemplo</b> — sustituye estas filas por tus inversiones reales.</div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Todas</button>
+      <button class="filter-btn" data-filter="invested">Invested</button>
+      <button class="filter-btn" data-filter="exited">Exited</button>
+    </div>
+
+    <div class="co-list" id="co-list">
+      <div class="table-head" style="grid-template-columns:44px 2fr 1.2fr 1fr 0.9fr 0.9fr 20px;">
+        <span></span><span>Compañía</span><span>Sector</span><span>Año</span><span>Ronda</span><span>Estado</span><span></span>
+      </div>
+      <!-- filas inyectadas por JS desde COMPANIES -->
+    </div>
+  </div>
+</section>
+
+<section id="realestate" class="tint-blue">
+  <div class="wrap">
+    <span class="section-watermark">03</span>
+    <span class="section-index">03 — Real Estate</span>
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Activos inmobiliarios</h2>
+      </div>
+      <p class="section-note">Propiedades residenciales y comerciales adquiridas de forma directa.</p>
+    </div>
+
+    <div class="demo-flag"><b>Datos de ejemplo</b> — sustituye estas filas por tus activos reales.</div>
+
+    <div class="re-list" id="re-list">
+      <div class="table-head" style="grid-template-columns:44px 1.8fr 1.2fr 1fr 0.9fr 20px;">
+        <span></span><span>Activo</span><span>Ubicación</span><span>Año</span><span>Estado</span><span></span>
+      </div>
+      <!-- filas inyectadas por JS desde REAL_ESTATE -->
+    </div>
+  </div>
+</section>
+
+<section id="opportunities" class="tint-green">
+  <div class="wrap">
+    <span class="section-watermark">04</span>
+    <span class="section-index">04 — Oportunidades</span>
+    <div class="opp-grid">
+      <div>
+        <h2 class="section-title">¿Tienes una oportunidad?</h2>
+        <p class="section-note" style="margin-top:14px; max-width:480px;">Nicsal Investments evalúa oportunidades de
+          inversión directa en startups, empresas consolidadas y real estate. Así es como decidimos.</p>
+        <ul class="opp-criteria">
+          <li><b>01</b> Equipo fundador con dedicación completa y track record demostrable.</li>
+          <li><b>02</b> Modelo de negocio con caja predecible o camino claro a rentabilidad.</li>
+          <li><b>03</b> Ticket entre 50K y 500K €, con posibilidad de seguimiento en rondas futuras.</li>
+          <li><b>04</b> Para real estate: ubicaciones con revalorización estructural y gestión operativa clara.</li>
+        </ul>
+      </div>
+      <form class="opp-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Enviado ✓';">
+        <label for="name">Nombre</label>
+        <input id="name" type="text" placeholder="Tu nombre" required>
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="tu@empresa.com" required>
+        <label for="type">Tipo de oportunidad</label>
+        <select id="type">
+          <option>Startup / Empresa</option>
+          <option>Real Estate</option>
+          <option>Otro</option>
+        </select>
+        <label for="msg">Cuéntanos brevemente</label>
+        <textarea id="msg" placeholder="Sector, etapa, ticket buscado…" required></textarea>
+        <button type="submit" class="btn btn-primary">Enviar oportunidad →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <span class="brand-mark">NIC<span>SAL</span></span>
+      <p class="footer-tagline">Holding personal de Nicolás Salame. Inversión directa en startups, empresas
+        consolidadas y real estate, sin comité de inversión ni plazos artificiales.</p>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">Navegación</span>
+      <a href="#about">Sobre mí</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#realestate">Real Estate</a>
+      <a href="#opportunities">Oportunidades</a>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">Contacto</span>
+      <a href="mailto:nicolas@nicsal.com">nicolas@nicsal.com</a>
+      <a href="#">LinkedIn</a>
+      <span class="footer-location">Barcelona, España</span>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <p>© 2026 Nicsal Investments</p>
+    <p>Sitio informativo — no constituye oferta ni asesoramiento de inversión.</p>
+  </div>
+</footer>
+</div>
+
+<div id="detail-view" style="display:none;">
+  <header class="site-nav">
+    <div class="wrap nav-inner">
+      <div class="brand">
+        <span class="brand-mark">NIC<span>SAL</span></span>
+        <span class="brand-tag">Investments — Holding personal</span>
+      </div>
+      <a href="#" id="detail-back-top" class="btn btn-ghost" style="padding:9px 18px;">← Volver</a>
+    </div>
+  </header>
+  <section style="padding-top:64px;">
+    <div class="wrap" id="detail-content"><!-- inyectado por JS --></div>
+  </section>
+  <footer>
+    <div class="wrap footer-grid">
+      <div class="footer-brand">
+        <span class="brand-mark">NIC<span>SAL</span></span>
+        <p class="footer-tagline">Holding personal de Nicolás Salame. Inversión directa en startups, empresas
+          consolidadas y real estate, sin comité de inversión ni plazos artificiales.</p>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title">Navegación</span>
+        <a href="#about">Sobre mí</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#realestate">Real Estate</a>
+        <a href="#opportunities">Oportunidades</a>
+      </div>
+      <div class="footer-col">
+        <span class="footer-col-title">Contacto</span>
+        <a href="mailto:nicolas@nicsal.com">nicolas@nicsal.com</a>
+        <a href="#">LinkedIn</a>
+        <span class="footer-location">Barcelona, España</span>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <p>© 2026 Nicsal Investments</p>
+      <p>Sitio informativo — no constituye oferta ni asesoramiento de inversión.</p>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // ============ DATOS DE EJEMPLO — sustituye por tus inversiones reales ============
+  const COMPANIES = [
+    { id:'Akiles', logo:'logos/akiles.png', initials:'AK', name:'Akiles Technologies', sector:'Deep Tech / Robótica', year:2018, round:'founded', status:'founded',
+      ticket:'150K €', website:'akiles.app', founders:'Nicolás Salame, Borja Rossell, Darío Nieuwenhuis',
+      description:[
+        'Aveon desarrolla brazos robóticos de bajo coste para líneas de producción de pymes industriales. [Placeholder — sustituye por la descripción real de la compañía.]',
+        'Entré en la ronda seed liderando junto a dos business angels del sector industrial. Sigo la compañía de cerca como advisor no ejecutivo.'
+      ], gallery:2 },
+    { id:'luxora', logo:'', initials:'LX', name:'Vamos Mundial Productions', sector:'Healthtech', year:2022, round:'Series A', status:'invested',
+      ticket:'220K €', website:'luxorahealth.com', founders:'Clara Nadal',
+      description:[
+        'Luxora construye software de gestión clínica para clínicas dentales independientes. [Placeholder — descripción real de la compañía.]'
+      ], gallery:2 },
+    { id:'finora', logo:'', initials:'FN', name:'AloAlto Foods', sector:'Fintech', year:2019, round:'Seed', status:'exited', exitYear:2023,
+      ticket:'80K €', website:'finora.io', founders:'Pol Serra, Anna Vidal',
+      description:[
+        'Finora ofrecía cuentas remuneradas para pymes. Adquirida por un banco digital europeo en 2023. [Placeholder — descripción real y detalles del exit.]'
+      ], gallery:1 },
+    { id:'finora', logo:'', initials:'FN', name:'Obsidian', sector:'Fintech', year:2019, round:'Seed', status:'exited', exitYear:2023,
+      ticket:'80K €', website:'finora.io', founders:'Pol Serra, Anna Vidal',
+      description:[
+        'Finora ofrecía cuentas remuneradas para pymes. Adquirida por un banco digital europeo en 2023. [Placeholder — descripción real y detalles del exit.]'
+      ], gallery:1 },
+    { id:'greenroute', logo:'', initials:'GR', name:'HutPods', sector:'Logística / Climate', year:2023, round:'Pre-seed', status:'invested',
+      ticket:'60K €', logo:'', website:'greenroute.eco', founders:'Diego Marín',
+      description:[
+        'Greenroute optimiza rutas de última milla para reducir emisiones. [Placeholder — descripción real de la compañía.]'
+      ], gallery:1 },
+    { id:'dokku', logo:'',initials:'DK', name:'Dokku', sector:'SaaS B2B', year:2018, round:'Seed', status:'exited', exitYear:2022,
+      ticket:'70K €', website:'dokku.app', founders:'Laura Ferrer, Marc Roig',
+      description:[
+        'Dokku era una herramienta de documentación interna para equipos técnicos. Adquirida por una compañía de software en 2022. [Placeholder — detalles reales del exit.]'
+      ], gallery:1 },
+    { id:'vintra', logo:'', initials:'VT', name:'Vintra Foods', sector:'Consumo / F&B', year:2020, round:'Directa', status:'invested',
+      ticket:'100K €', website:'vintrafoods.com', founders:'Núria Camps',
+      description:[
+        'Vintra produce conservas gourmet de proximidad. Inversión directa fuera de rondas institucionales. [Placeholder — descripción real de la compañía.]'
+      ], gallery:2 },
+  ];
+
+  const REAL_ESTATE = [
+    { id:'eixample', name:'Edificio residencial · Eixample', type:'Residencial', location:'Barcelona, ES', year:2019, status:'invested',
+      surface:'620 m²', units:'8 viviendas', reform:true,
+      description:[
+        'Edificio de 8 viviendas adquirido para reforma integral y puesta en alquiler. [Placeholder — descripción real del proyecto: estado de compra, alcance de la reforma, estrategia.]'
+      ], galleryBefore:3, galleryAfter:3 },
+    { id:'granollers-local', name:'Local comercial · centro', type:'Comercial', location:'Granollers, ES', year:2020, status:'invested',
+      surface:'180 m²', units:'1 local', reform:true,
+      description:[
+        'Local en planta baja reformado y alquilado a cadena de restauración. [Placeholder — descripción real del proyecto.]'
+      ], galleryBefore:2, galleryAfter:2 },
+    { id:'zaragoza-nave', name:'Nave logística', type:'Industrial', location:'Zaragoza, ES', year:2021, status:'exited', exitYear:2024,
+      surface:'2.400 m²', units:'1 nave', reform:false,
+      description:[
+        'Nave logística adquirida y arrendada a operador de última milla, vendida en 2024. [Placeholder — detalles reales del exit.]'
+      ], galleryBefore:0, galleryAfter:3 },
+    { id:'lisboa-apto', name:'Apartamento turístico', type:'Residencial / turístico', location:'Lisboa, PT', year:2022, status:'invested',
+      surface:'75 m²', units:'1 apartamento', reform:true,
+      description:[
+        'Apartamento en Alfama reformado para alquiler turístico de corta estancia. [Placeholder — descripción real del proyecto.]'
+      ], galleryBefore:2, galleryAfter:3 },
+  ];
+
+  // ============ RENDER LISTAS ============
+  const statusLabel = (item) => item.status === 'exited'
+    ? `Exited${item.exitYear ? ' · ' + item.exitYear : ''}`
+    : 'Invested';
+  
+  function logoHtml(c){
+  return c.logo
+    ? `<img src="${c.logo}" alt="${c.name}">`
+    : c.initials;
+  }
+
+  function renderCompanies(){
+    const list = document.getElementById('co-list');
+    list.querySelectorAll('.co-row').forEach(r => r.remove());
+    COMPANIES.forEach(c => {
+      const row = document.createElement('div');
+      row.className = 'co-row';
+      row.dataset.status = c.status;
+      row.dataset.id = c.id;
+      row.tabIndex = 0;
+      row.setAttribute('role','button');
+      row.innerHTML = `
+        <div class="logo-badge">${logoHtml(c)}</div>
+        <div class="co-name">${c.name}</div>
+        <div class="co-sector">${c.sector}</div>
+        <div class="co-year">${c.year}</div>
+        <div class="co-round">${c.round}</div>
+        <span class="status-pill status-${c.status}">${statusLabel(c)}</span>
+        <span class="row-arrow">&rarr;</span>`;
+      row.addEventListener('click', () => { location.hash = 'company/' + c.id; });
+      row.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); location.hash = 'company/' + c.id; }});
+      list.appendChild(row);
+    });
+  }
+
+  function renderRealEstate(){
+    const list = document.getElementById('re-list');
+    list.querySelectorAll('.re-row').forEach(r => r.remove());
+    REAL_ESTATE.forEach(p => {
+      const row = document.createElement('div');
+      row.className = 're-row';
+      row.dataset.id = p.id;
+      row.tabIndex = 0;
+      row.setAttribute('role','button');
+      row.innerHTML = `
+        <div class="re-icon">◆</div>
+        <div class="re-name">${p.name}</div>
+        <div class="re-loc">${p.location}</div>
+        <div class="co-year">${p.year}</div>
+        <span class="status-pill status-${p.status}">${statusLabel(p)}</span>
+        <span class="row-arrow">&rarr;</span>`;
+      row.addEventListener('click', () => { location.hash = 'realestate/' + p.id; });
+      row.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); location.hash = 'realestate/' + p.id; }});
+      list.appendChild(row);
+    });
+  }
+
+  // ============ FILTROS (portfolio) ============
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.co-row').forEach(row => {
+        row.style.display = (f === 'all' || row.dataset.status === f) ? 'grid' : 'none';
+      });
+    });
+  });
+
+  // ============ GALERÍA PLACEHOLDER ============
+  function galleryTiles(n, label){
+    let html = '';
+    for(let i=1; i<=n; i++){
+      html += `<div class="gallery-tile"><span class="icon">&#128247;</span><span>${label} ${i}<br>foto placeholder</span></div>`;
+    }
+    return html;
+  }
+
+  // ============ DETALLE: COMPAÑÍA ============
+  function renderCompanyDetail(c){
+    return `
+      <a href="#portfolio" class="back-link">&larr; Volver a portfolio</a>
+      <div class="detail-header">
+        <div class="detail-logo">${logoHtml(c)}</div>
+        <div class="detail-titles">
+          <div class="detail-eyebrow">${c.sector}</div>
+          <h1 class="detail-title">${c.name}</h1>
+        </div>
+        <span class="status-pill status-${c.status}" style="font-size:12.5px; padding:7px 14px;">${statusLabel(c)}</span>
+      </div>
+
+      <div class="detail-facts">
+        <div class="detail-fact"><b>${c.year}</b><span>Año de inversión</span></div>
+        <div class="detail-fact"><b>${c.round}</b><span>Ronda</span></div>
+        <div class="detail-fact"><b>${c.ticket}</b><span>Ticket</span></div>
+        <div class="detail-fact"><b>${c.website}</b><span>Web</span></div>
+        <div class="detail-fact"><b>${c.founders}</b><span>Fundadores</span></div>
+      </div>
+
+      <div class="demo-flag small"><b>Contenido de ejemplo</b> — sustituye la descripción y las fotos por las reales.</div>
+
+      <div class="detail-body">
+        ${c.description.map(p => `<p>${p}</p>`).join('')}
+      </div>
+
+      ${c.gallery > 0 ? `
+      <div class="gallery-block">
+        <div class="gallery-label">Producto / equipo</div>
+        <div class="gallery-grid">${galleryTiles(c.gallery, 'Foto')}</div>
+      </div>` : ''}
+    `;
+  }
+
+  // ============ DETALLE: REAL ESTATE ============
+  function renderRealEstateDetail(p){
+    let galleryHtml = '';
+    if(p.reform){
+      if(p.galleryBefore > 0){
+        galleryHtml += `
+        <div class="gallery-block">
+          <div class="gallery-label">Antes de la reforma</div>
+          <div class="gallery-grid">${galleryTiles(p.galleryBefore, 'Antes')}</div>
+        </div>`;
+      }
+      if(p.galleryAfter > 0){
+        galleryHtml += `
+        <div class="gallery-block">
+          <div class="gallery-label">Después de la reforma</div>
+          <div class="gallery-grid">${galleryTiles(p.galleryAfter, 'Después')}</div>
+        </div>`;
+      }
+    } else if(p.galleryAfter > 0){
+      galleryHtml += `
+      <div class="gallery-block">
+        <div class="gallery-label">Fotos del proyecto</div>
+        <div class="gallery-grid">${galleryTiles(p.galleryAfter, 'Foto')}</div>
+      </div>`;
+    }
+
+    return `
+      <a href="#realestate" class="back-link">&larr; Volver a real estate</a>
+      <div class="detail-header">
+        <div class="detail-logo">&#9670;</div>
+        <div class="detail-titles">
+          <div class="detail-eyebrow">${p.type} — ${p.location}</div>
+          <h1 class="detail-title">${p.name}</h1>
+        </div>
+        <span class="status-pill status-${p.status}" style="font-size:12.5px; padding:7px 14px;">${statusLabel(p)}</span>
+      </div>
+
+      <div class="detail-facts">
+        <div class="detail-fact"><b>${p.year}</b><span>Año de inversión</span></div>
+        <div class="detail-fact"><b>${p.location}</b><span>Ubicación</span></div>
+        <div class="detail-fact"><b>${p.surface}</b><span>Superficie</span></div>
+        <div class="detail-fact"><b>${p.units}</b><span>Unidades</span></div>
+        <div class="detail-fact"><b>${p.reform ? 'Sí' : 'No'}</b><span>Reforma</span></div>
+      </div>
+
+      <div class="demo-flag small"><b>Contenido de ejemplo</b> — sustituye la descripción y las fotos por las reales.</div>
+
+      <div class="detail-body">
+        ${p.description.map(t => `<p>${t}</p>`).join('')}
+      </div>
+
+      ${galleryHtml}
+    `;
+  }
+
+  // ============ ROUTING ============
+  const mainView = document.getElementById('main-view');
+  const detailView = document.getElementById('detail-view');
+  const detailContent = document.getElementById('detail-content');
+
+  function showMain(){
+    detailView.style.display = 'none';
+    mainView.style.display = '';
+  }
+
+  function showDetail(html){
+    detailContent.innerHTML = html;
+    mainView.style.display = 'none';
+    detailView.style.display = '';
+    window.scrollTo(0,0);
+  }
+
+  function route(){
+    const hash = location.hash.replace('#','');
+    if(hash.startsWith('company/')){
+      const c = COMPANIES.find(x => x.id === hash.split('/')[1]);
+      if(c){ showDetail(renderCompanyDetail(c)); return; }
+    }
+    if(hash.startsWith('realestate/')){
+      const p = REAL_ESTATE.find(x => x.id === hash.split('/')[1]);
+      if(p){ showDetail(renderRealEstateDetail(p)); return; }
+    }
+    showMain();
+  }
+
+  document.getElementById('detail-back-top').addEventListener('click', (e) => {
+    e.preventDefault();
+    history.back();
+  });
+
+  window.addEventListener('hashchange', route);
+
+  renderCompanies();
+  renderRealEstate();
+  route();
+</script>
+
+</body>
+</html>
