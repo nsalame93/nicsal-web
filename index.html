@@ -83,7 +83,10 @@
     background:var(--brass); transition:width .2s ease;
   }
   nav.nav-links a:hover::after{width:100%;}
-  @media(max-width:760px){ nav.nav-links{display:none;} }
+  @media(max-width:760px){
+    nav.nav-links{ display:flex; gap:14px; }
+    nav.nav-links a{ font-size:11px; }
+  }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -141,7 +144,8 @@
   .hero-bg{
     position:absolute; inset:-30px;
     background-size: 140%; background-position: -10% 35%;
-    filter:blur(0px) brightness(0.85) saturate(0.9);
+    background-repeat: no-repeat;
+    filter:blur(0px) brightness(1) saturate(0.9);
     z-index:0;
   }
   .hero-overlay{
@@ -294,13 +298,21 @@
   @media(max-width:820px){
     .table-head{display:none;}
     .co-row, .re-row{
-      grid-template-columns:44px 1fr; grid-template-areas:"logo name" "sector sector" "meta meta";
+      grid-template-columns:44px 1fr;
+      grid-template-areas:
+        "logo name"
+        "sector sector"
+        "year year"
+        "round round"
+        "status status";
       row-gap:6px; padding:18px;
     }
     .logo-badge{grid-area:logo;}
-    .co-name{grid-area:name;}
-    .co-sector{grid-area:sector;}
-    .co-year, .co-round, .status-pill{ grid-area:meta; display:inline-block; margin-right:14px; }
+    .co-name, .re-name{grid-area:name;}
+    .co-sector, .re-loc{grid-area:sector;}
+    .co-year{grid-area:year;}
+    .co-round{grid-area:round;}
+    .status-pill{ grid-area:status; margin-top:4px; }
     .row-arrow{ display:none; }
   }
 
@@ -485,7 +497,7 @@
 
 <div id="main-view">
 <section class="hero">
-  <div class="hero-bg" style="background-image: url('hero.jpg');"></div>
+  <div class="hero-bg" style="background-image:url('hero.jpg');"></div>
   <div class="hero-overlay"></div>
   <div class="wrap">
     <h1 class="hero-title">Quiero estar donde se <em>construye</em> el futuro.</h1>
